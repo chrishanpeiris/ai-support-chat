@@ -1,0 +1,14 @@
+{
+  "name": "ai-support-chat",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w apps/bff\" \"npm run dev -w apps/web\"",
+    "build": "npm run build -w apps/bff && npm run build -w apps/web",
+    "lint": "npm run lint -w apps/bff && npm run lint -w apps/web",
+    "typecheck": "npm run typecheck -w apps/bff && npm run typecheck -w apps/web"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
