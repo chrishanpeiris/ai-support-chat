@@ -51,7 +51,8 @@ jobs:
       - name: Build and push BFF
         uses: docker/build-push-action@v5
         with:
-          context: ./apps/bff
+          context: .
+          file: ./apps/bff/Dockerfile
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: ghcr.io/${{ github.repository }}/bff:latest
           cache-from: type=gha
@@ -60,7 +61,8 @@ jobs:
       - name: Build and push Web
         uses: docker/build-push-action@v5
         with:
-          context: ./apps/web
+          context: .
+          file: ./apps/web/Dockerfile
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: ghcr.io/${{ github.repository }}/web:latest
           cache-from: type=gha
