@@ -120,7 +120,7 @@ export default function ChatWindow() {
         {messages.length === 0 && (
           <div className="text-center text-gray-400 mt-24 select-none">
             <p className="text-lg font-medium">How can I help you today?</p>
-            <p className="text-sm mt-1">Try: "What laptops do you have?" or "Show my orders"</p>
+            <p className="text-sm mt-1">Try: &ldquo;What laptops do you have?&rdquo; or &ldquo;Show my orders&rdquo;</p>
           </div>
         )}
         {messages.map((msg) => (
