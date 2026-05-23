@@ -11,6 +11,8 @@ A full-stack AI-powered customer support chat application demonstrating:
 
 ## Architecture
 
+➡ **[Interactive architecture diagram](docs/architecture.html)** — open in a browser, download as PNG.
+
 ```
 Browser (Next.js)
    │  credentials login

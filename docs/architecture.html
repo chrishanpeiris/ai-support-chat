@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Support Chat — Architecture Diagram</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f1117;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px 48px;
+      min-height: 100vh;
+      color: #e1e4e8;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #8b949e;
+      margin-bottom: 28px;
+    }
+    .diagram-wrap {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+      width: 100%;
+      max-width: 980px;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    button {
+      background: #238636;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    button:hover { background: #2ea043; }
+    button.secondary {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+    }
+    button.secondary:hover { background: #30363d; }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #8b949e;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>AI Support Chat — System Architecture</h1>
+<p class="subtitle">Next.js 14 · Node.js BFF · Ollama LLM · PostgreSQL · Docker · GitHub Actions</p>
+
+<div class="diagram-wrap" id="diagram-wrap">
+  <svg id="arch-svg" viewBox="0 0 940 760" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+    <defs>
+      <!-- Arrow markers -->
+      <marker id="arrow-blue"   markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#58a6ff"/></marker>
+      <marker id="arrow-green"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3fb950"/></marker>
+      <marker id="arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#a371f7"/></marker>
+      <marker id="arrow-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#f0883e"/></marker>
+      <marker id="arrow-yellow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#d29922"/></marker>
+      <marker id="arrow-grey"   markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8b949e"/></marker>
+      <!-- Glow filters -->
+      <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+      </filter>
+    </defs>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  BACKGROUND SECTIONS                                     -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- Row 1: Browser + Next.js -->
+    <rect x="20"  y="20"  width="420" height="200" rx="10" fill="#0d1f3c" stroke="#1f6feb" stroke-width="1.5" opacity="0.8"/>
+    <rect x="460" y="20"  width="460" height="200" rx="10" fill="#0d2818" stroke="#238636" stroke-width="1.5" opacity="0.8"/>
+
+    <!-- Row 2: BFF -->
+    <rect x="20"  y="245" width="900" height="230" rx="10" fill="#1a0d2e" stroke="#6e40c9" stroke-width="1.5" opacity="0.8"/>
+
+    <!-- Row 3: Data + LLM -->
+    <rect x="20"  y="500" width="420" height="170" rx="10" fill="#1c1507" stroke="#bb8009" stroke-width="1.5" opacity="0.8"/>
+    <rect x="460" y="500" width="460" height="170" rx="10" fill="#1c0f05" stroke="#bd561d" stroke-width="1.5" opacity="0.8"/>
+
+    <!-- Row 4: Infra (full width) -->
+    <rect x="20"  y="695" width="900" height="52" rx="10" fill="#111820" stroke="#30363d" stroke-width="1.5" opacity="0.9"/>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  SECTION LABELS                                          -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <text x="35"  y="42"  font-size="11" font-weight="700" fill="#58a6ff"  letter-spacing="1.5" text-transform="uppercase">BROWSER</text>
+    <text x="475" y="42"  font-size="11" font-weight="700" fill="#3fb950"  letter-spacing="1.5">NEXT.JS 14  (port 3000)</text>
+    <text x="35"  y="267" font-size="11" font-weight="700" fill="#a371f7"  letter-spacing="1.5">BFF  –  Node.js / Express  (port 3001)</text>
+    <text x="35"  y="522" font-size="11" font-weight="700" fill="#d29922"  letter-spacing="1.5">POSTGRESQL  (port 5432)</text>
+    <text x="475" y="522" font-size="11" font-weight="700" fill="#f0883e"  letter-spacing="1.5">OLLAMA  (port 11434)</text>
+    <text x="35"  y="717" font-size="11" font-weight="700" fill="#8b949e"  letter-spacing="1.5">INFRASTRUCTURE</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  BROWSER BOXES                                           -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- Login Page -->
+    <rect x="40"  y="56"  width="170" height="140" rx="8" fill="#0d1f3c" stroke="#1f6feb" stroke-width="1.5"/>
+    <text x="125" y="80"  font-size="12" font-weight="600" fill="#79c0ff" text-anchor="middle">Login Page</text>
+    <line x1="45" y1="87" x2="205" y2="87" stroke="#1f6feb" stroke-width="0.8" opacity="0.6"/>
+    <text x="125" y="107" font-size="10" fill="#8b949e" text-anchor="middle">Credentials form</text>
+    <text x="125" y="122" font-size="10" fill="#8b949e" text-anchor="middle">NextAuth signIn()</text>
+    <text x="125" y="137" font-size="10" fill="#8b949e" text-anchor="middle">Session cookie set</text>
+    <text x="125" y="152" font-size="10" fill="#8b949e" text-anchor="middle">Redirect → /chat</text>
+    <text x="125" y="183" font-size="9"  fill="#388bfd" text-anchor="middle" font-style="italic">Server-side guard</text>
+
+    <!-- Chat Window -->
+    <rect x="230" y="56"  width="190" height="140" rx="8" fill="#0d1f3c" stroke="#1f6feb" stroke-width="1.5"/>
+    <text x="325" y="80"  font-size="12" font-weight="600" fill="#79c0ff" text-anchor="middle">Chat Window</text>
+    <line x1="235" y1="87" x2="415" y2="87" stroke="#1f6feb" stroke-width="0.8" opacity="0.6"/>
+    <text x="325" y="107" font-size="10" fill="#8b949e" text-anchor="middle">Message list (SSE)</text>
+    <text x="325" y="122" font-size="10" fill="#8b949e" text-anchor="middle">Streaming text delta</text>
+    <text x="325" y="137" font-size="10" fill="#8b949e" text-anchor="middle">ToolCallCard widget</text>
+    <text x="325" y="152" font-size="10" fill="#8b949e" text-anchor="middle">Auto-scroll ref</text>
+    <text x="325" y="183" font-size="9"  fill="#388bfd" text-anchor="middle" font-style="italic">Client component</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  NEXT.JS BOXES                                           -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- NextAuth -->
+    <rect x="478" y="56"  width="180" height="140" rx="8" fill="#0d2818" stroke="#238636" stroke-width="1.5"/>
+    <text x="568" y="80"  font-size="12" font-weight="600" fill="#56d364" text-anchor="middle">NextAuth.js v4</text>
+    <line x1="483" y1="87" x2="653" y2="87" stroke="#238636" stroke-width="0.8" opacity="0.6"/>
+    <text x="568" y="107" font-size="10" fill="#8b949e" text-anchor="middle">Credentials provider</text>
+    <text x="568" y="122" font-size="10" fill="#8b949e" text-anchor="middle">jwt() callback</text>
+    <text x="568" y="137" font-size="10" fill="#8b949e" text-anchor="middle">Signs BFF JWT (HS256)</text>
+    <text x="568" y="152" font-size="10" fill="#8b949e" text-anchor="middle">session.bffToken</text>
+    <text x="568" y="183" font-size="9"  fill="#3fb950" text-anchor="middle" font-style="italic">Shared NEXTAUTH_SECRET</text>
+
+    <!-- bff-client.ts -->
+    <rect x="678" y="56"  width="220" height="140" rx="8" fill="#0d2818" stroke="#238636" stroke-width="1.5"/>
+    <text x="788" y="80"  font-size="12" font-weight="600" fill="#56d364" text-anchor="middle">bff-client.ts</text>
+    <line x1="683" y1="87" x2="893" y2="87" stroke="#238636" stroke-width="0.8" opacity="0.6"/>
+    <text x="788" y="107" font-size="10" fill="#8b949e" text-anchor="middle">fetch() (not EventSource)</text>
+    <text x="788" y="122" font-size="10" fill="#8b949e" text-anchor="middle">Authorization: Bearer</text>
+    <text x="788" y="137" font-size="10" fill="#8b949e" text-anchor="middle">ReadableStream reader</text>
+    <text x="788" y="152" font-size="10" fill="#8b949e" text-anchor="middle">SSE line parser</text>
+    <text x="788" y="183" font-size="9"  fill="#3fb950" text-anchor="middle" font-style="italic">Supports custom headers</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  BFF BOXES                                               -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- Auth Middleware -->
+    <rect x="40"  y="283" width="170" height="170" rx="8" fill="#1a0d2e" stroke="#6e40c9" stroke-width="1.5"/>
+    <text x="125" y="307" font-size="12" font-weight="600" fill="#c084fc" text-anchor="middle">Auth Middleware</text>
+    <line x1="45" y1="314" x2="205" y2="314" stroke="#6e40c9" stroke-width="0.8" opacity="0.6"/>
+    <text x="125" y="334" font-size="10" fill="#8b949e" text-anchor="middle">jwtVerify (jose)</text>
+    <text x="125" y="349" font-size="10" fill="#8b949e" text-anchor="middle">Extracts userId</text>
+    <text x="125" y="364" font-size="10" fill="#8b949e" text-anchor="middle">401 on bad token</text>
+    <text x="125" y="435" font-size="9"  fill="#a371f7" text-anchor="middle" font-style="italic">Stateless verification</text>
+
+    <!-- Chat Route + Conv Service -->
+    <rect x="230" y="283" width="185" height="170" rx="8" fill="#1a0d2e" stroke="#6e40c9" stroke-width="1.5"/>
+    <text x="322" y="307" font-size="12" font-weight="600" fill="#c084fc" text-anchor="middle">Chat Route</text>
+    <line x1="235" y1="314" x2="410" y2="314" stroke="#6e40c9" stroke-width="0.8" opacity="0.6"/>
+    <text x="322" y="334" font-size="10" fill="#8b949e" text-anchor="middle">POST /api/chat/stream</text>
+    <text x="322" y="349" font-size="10" fill="#8b949e" text-anchor="middle">Set SSE headers</text>
+    <text x="322" y="364" font-size="10" fill="#8b949e" text-anchor="middle">Create conversation</text>
+    <text x="322" y="379" font-size="10" fill="#8b949e" text-anchor="middle">→ llm.service.ts</text>
+    <text x="322" y="435" font-size="9"  fill="#a371f7" text-anchor="middle" font-style="italic">text/event-stream</text>
+
+    <!-- LLM Service -->
+    <rect x="435" y="283" width="220" height="170" rx="8" fill="#1a0d2e" stroke="#6e40c9" stroke-width="1.5"/>
+    <text x="545" y="307" font-size="12" font-weight="600" fill="#c084fc" text-anchor="middle">LLM Service</text>
+    <line x1="440" y1="314" x2="650" y2="314" stroke="#6e40c9" stroke-width="0.8" opacity="0.6"/>
+    <text x="545" y="334" font-size="10" fill="#8b949e" text-anchor="middle">OpenAI-compat client</text>
+    <text x="545" y="349" font-size="10" fill="#8b949e" text-anchor="middle">Tool call loop (≤5 rounds)</text>
+    <text x="545" y="364" font-size="10" fill="#8b949e" text-anchor="middle">Stream text_delta events</text>
+    <text x="545" y="379" font-size="10" fill="#8b949e" text-anchor="middle">Persist messages to DB</text>
+    <text x="545" y="435" font-size="9"  fill="#a371f7" text-anchor="middle" font-style="italic">Stateful multi-turn context</text>
+
+    <!-- Tools Service -->
+    <rect x="675" y="283" width="225" height="170" rx="8" fill="#1a0d2e" stroke="#6e40c9" stroke-width="1.5"/>
+    <text x="787" y="307" font-size="12" font-weight="600" fill="#c084fc" text-anchor="middle">Tools Service</text>
+    <line x1="680" y1="314" x2="895" y2="314" stroke="#6e40c9" stroke-width="0.8" opacity="0.6"/>
+    <text x="787" y="334" font-size="10" fill="#8b949e" text-anchor="middle">get_product_info(query)</text>
+    <text x="787" y="349" font-size="10" fill="#8b949e" text-anchor="middle">ILIKE product search</text>
+    <text x="787" y="364" font-size="10" fill="#8b949e" text-anchor="middle">get_order_status(userId)</text>
+    <text x="787" y="379" font-size="10" fill="#8b949e" text-anchor="middle">JOIN orders + products</text>
+    <text x="787" y="435" font-size="9"  fill="#a371f7" text-anchor="middle" font-style="italic">DB-backed tool execution</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  POSTGRESQL BOXES                                        -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <rect x="40"  y="536" width="185" height="114" rx="8" fill="#1c1507" stroke="#bb8009" stroke-width="1.5"/>
+    <text x="132" y="560" font-size="12" font-weight="600" fill="#e3b341" text-anchor="middle">Schema</text>
+    <line x1="45" y1="567" x2="220" y2="567" stroke="#bb8009" stroke-width="0.8" opacity="0.6"/>
+    <text x="132" y="587" font-size="10" fill="#8b949e" text-anchor="middle">users (bcrypt pw)</text>
+    <text x="132" y="602" font-size="10" fill="#8b949e" text-anchor="middle">conversations</text>
+    <text x="132" y="617" font-size="10" fill="#8b949e" text-anchor="middle">messages</text>
+    <text x="132" y="632" font-size="10" fill="#8b949e" text-anchor="middle">products · orders</text>
+
+    <rect x="245" y="536" width="175" height="114" rx="8" fill="#1c1507" stroke="#bb8009" stroke-width="1.5"/>
+    <text x="332" y="560" font-size="12" font-weight="600" fill="#e3b341" text-anchor="middle">Seed Data</text>
+    <line x1="250" y1="567" x2="415" y2="567" stroke="#bb8009" stroke-width="0.8" opacity="0.6"/>
+    <text x="332" y="587" font-size="10" fill="#8b949e" text-anchor="middle">demo@example.com</text>
+    <text x="332" y="602" font-size="10" fill="#8b949e" text-anchor="middle">5 demo products</text>
+    <text x="332" y="617" font-size="10" fill="#8b949e" text-anchor="middle">3 demo orders</text>
+    <text x="332" y="632" font-size="10" fill="#8b949e" text-anchor="middle">migrate.ts on startup</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  OLLAMA BOXES                                            -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <rect x="478" y="536" width="200" height="114" rx="8" fill="#1c0f05" stroke="#bd561d" stroke-width="1.5"/>
+    <text x="578" y="560" font-size="12" font-weight="600" fill="#ffa657" text-anchor="middle">llama3.2 (3B)</text>
+    <line x1="483" y1="567" x2="673" y2="567" stroke="#bd561d" stroke-width="0.8" opacity="0.6"/>
+    <text x="578" y="587" font-size="10" fill="#8b949e" text-anchor="middle">Local inference</text>
+    <text x="578" y="602" font-size="10" fill="#8b949e" text-anchor="middle">Supports tool calling</text>
+    <text x="578" y="617" font-size="10" fill="#8b949e" text-anchor="middle">Streaming completions</text>
+    <text x="578" y="632" font-size="10" fill="#8b949e" text-anchor="middle">No API cost</text>
+
+    <rect x="698" y="536" width="205" height="114" rx="8" fill="#1c0f05" stroke="#bd561d" stroke-width="1.5"/>
+    <text x="800" y="560" font-size="12" font-weight="600" fill="#ffa657" text-anchor="middle">OpenAI-compat API</text>
+    <line x1="703" y1="567" x2="898" y2="567" stroke="#bd561d" stroke-width="0.8" opacity="0.6"/>
+    <text x="800" y="587" font-size="10" fill="#8b949e" text-anchor="middle">/v1/chat/completions</text>
+    <text x="800" y="602" font-size="10" fill="#8b949e" text-anchor="middle">stream: true</text>
+    <text x="800" y="617" font-size="10" fill="#8b949e" text-anchor="middle">tool_choice: auto</text>
+    <text x="800" y="632" font-size="10" fill="#8b949e" text-anchor="middle">Drop-in for OpenAI SDK</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  INFRA STRIP                                             -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <text x="200"  y="727" font-size="10" fill="#8b949e" text-anchor="middle">Docker Compose</text>
+    <text x="200"  y="740" font-size="9"  fill="#484f58" text-anchor="middle">4 services · named volumes</text>
+    <text x="470"  y="727" font-size="10" fill="#8b949e" text-anchor="middle">Multi-stage Dockerfiles</text>
+    <text x="470"  y="740" font-size="9"  fill="#484f58" text-anchor="middle">deps → builder → runner</text>
+    <text x="720"  y="727" font-size="10" fill="#8b949e" text-anchor="middle">GitHub Actions CI</text>
+    <text x="720"  y="740" font-size="9"  fill="#484f58" text-anchor="middle">typecheck → lint → build+push GHCR</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  ARROWS — Layer 1 → Layer 2 (Browser ↔ Next.js)         -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- Login: credentials → NextAuth -->
+    <path d="M 420 110 L 478 110" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="5,3" fill="none" marker-end="url(#arrow-blue)"/>
+    <text x="449" y="105" font-size="9" fill="#58a6ff" text-anchor="middle">credentials</text>
+
+    <!-- Chat Window: fetch SSE → bff-client (horizontal within Next.js row) -->
+    <path d="M 420 155 L 678 155" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="5,3" fill="none" marker-end="url(#arrow-green)"/>
+    <text x="549" y="149" font-size="9" fill="#3fb950" text-anchor="middle">Bearer JWT</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  ARROWS — Layer 2 → Layer 3 (Next.js / Browser → BFF)   -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- NextAuth → Auth Middleware (login call) -->
+    <path d="M 568 196 L 568 230 L 125 230 L 125 283" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="5,3" fill="none" marker-end="url(#arrow-green)"/>
+    <text x="345" y="225" font-size="9" fill="#3fb950" text-anchor="middle">POST /api/auth/login</text>
+
+    <!-- bff-client → Chat Route (SSE stream) -->
+    <path d="M 788 196 L 788 230 L 322 230 L 322 283" stroke="#3fb950" stroke-width="1.5" fill="none" marker-end="url(#arrow-green)"/>
+    <text x="555" y="225" font-size="9" fill="#3fb950" text-anchor="middle" font-weight="600">SSE stream  ←→</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  ARROWS — Within BFF                                     -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- Auth Middleware → Chat Route -->
+    <path d="M 210 368 L 230 368" stroke="#a371f7" stroke-width="1.5" fill="none" marker-end="url(#arrow-purple)"/>
+    <text x="220" y="362" font-size="8" fill="#a371f7" text-anchor="middle">✓</text>
+
+    <!-- Chat Route → LLM Service -->
+    <path d="M 415 368 L 435 368" stroke="#a371f7" stroke-width="1.5" fill="none" marker-end="url(#arrow-purple)"/>
+
+    <!-- LLM Service → Tools Service -->
+    <path d="M 655 368 L 675 368" stroke="#a371f7" stroke-width="1.5" fill="none" marker-end="url(#arrow-purple)"/>
+    <text x="665" y="362" font-size="8" fill="#a371f7" text-anchor="middle">call</text>
+
+    <!-- Tools Service back to LLM Service (loop) -->
+    <path d="M 787 453 L 787 470 L 545 470 L 545 453" stroke="#a371f7" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#arrow-purple)"/>
+    <text x="666" y="483" font-size="9" fill="#a371f7" text-anchor="middle">tool result → next round</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  ARROWS — BFF → PostgreSQL                               -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- Tools Service → PostgreSQL -->
+    <path d="M 787 453 L 787 490 L 332 490 L 332 536" stroke="#d29922" stroke-width="1.5" fill="none" marker-end="url(#arrow-yellow)"/>
+    <text x="560" y="507" font-size="9" fill="#d29922" text-anchor="middle">SQL queries (raw pg)</text>
+
+    <!-- Auth Middleware → PostgreSQL (login check) -->
+    <path d="M 125 453 L 125 536" stroke="#d29922" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#arrow-yellow)"/>
+    <text x="90" y="497" font-size="9" fill="#d29922" text-anchor="middle" transform="rotate(-90, 90, 497)">auth</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  ARROWS — LLM Service → Ollama                           -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <path d="M 545 453 L 545 490 L 578 490 L 578 536" stroke="#f0883e" stroke-width="1.5" fill="none" marker-end="url(#arrow-orange)"/>
+    <text x="565" y="508" font-size="9" fill="#f0883e" text-anchor="middle">stream</text>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  ARROWS — Bottom rows → Infra                            -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <path d="M 230 670 L 230 695" stroke="#8b949e" stroke-width="1" stroke-dasharray="3,3" fill="none" marker-end="url(#arrow-grey)"/>
+    <path d="M 470 670 L 470 695" stroke="#8b949e" stroke-width="1" stroke-dasharray="3,3" fill="none" marker-end="url(#arrow-grey)"/>
+    <path d="M 720 670 L 720 695" stroke="#8b949e" stroke-width="1" stroke-dasharray="3,3" fill="none" marker-end="url(#arrow-grey)"/>
+
+  </svg>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#1f6feb;"></div>Browser (React / Next.js client)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#238636;"></div>Next.js 14 (server + auth)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#6e40c9;"></div>BFF — Node.js / Express</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#bb8009;"></div>PostgreSQL</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#bd561d;"></div>Ollama (local LLM)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#484f58;"></div>Infrastructure</div>
+</div>
+
+<div class="btn-row">
+  <button onclick="downloadPNG()">⬇ Download PNG</button>
+  <button class="secondary" onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<script>
+  function downloadPNG() {
+    const svg = document.getElementById('arch-svg');
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    const scale = 2; // retina
+    canvas.width  = 940 * scale;
+    canvas.height = 760 * scale;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+    ctx.fillStyle = '#161b22';
+    ctx.fillRect(0, 0, 940, 760);
+    const img = new Image();
+    const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, 940, 760);
+      URL.revokeObjectURL(url);
+      const a = document.createElement('a');
+      a.download = 'ai-support-chat-architecture.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    };
+    img.src = url;
+  }
+</script>
+
+</body>
+</html>
