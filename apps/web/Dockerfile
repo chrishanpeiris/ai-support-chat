@@ -21,9 +21,9 @@ FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-# outputFileTracingRoot=monorepo root means standalone puts server.js at apps/web/server.js
-COPY --from=builder /app/apps/web/.next/standalone        ./
-COPY --from=builder /app/apps/web/.next/static            ./apps/web/.next/static
-COPY --from=builder /app/apps/web/public                  ./apps/web/public
+# standalone output puts server.js at the root of the standalone directory
+COPY --from=builder /app/apps/web/.next/standalone ./
+COPY --from=builder /app/apps/web/.next/static     ./.next/static
+COPY --from=builder /app/apps/web/public           ./public
 EXPOSE 3000
-CMD ["node", "apps/web/server.js"]
+CMD ["node", "server.js"]
